@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        input {
+            display: block;
+            font-size: xx-large;
+            background: cornflowerblue;
+            color: yellow;
+            margin: 15px;
+            width: 405px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: block;
+            font-size: x-large;
+            background: cornflowerblue;
+            color: yellow;
+            margin: 15px;
+            width: 405px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #display {
+            display: block;
+            font-size: x-large;
+            background-color: tomato;
+            margin: 15px;
+            padding: 10px;
+            height: 10vh;
+            width: 405px;
+            box-sizing: border-box;
+        }
+
+        table {
+            font-size: x-large;
+            font-weight: 100;
+            padding: 10px;
+            margin: 5px;
+            width: 425px;
+            box-sizing: border-box;
+        }
+
+        td {
+            background-color: cornflowerblue;
+            padding: 10px;
+            box-sizing: border-box;
+            color: yellow;
+        }
+    </style>
+    <title>Search</title>
+</head>
+
+<body>
+
+    <input type="text" onload="onload" placeholder="search by ID/NAME...">
+    <button>Search</button>
+    <div id="display"></div>
+    <div id="dataBase"></div>
+
+</body>
+<script>
+    const student1 = { firstName: "mika", lastName: "moreh", id: '102030' };
+    const student2 = { firstName: "livnat", lastName: "porat", id: '405060' };
+    const student3 = { firstName: "davir", lastName: "hameleh", id: '708090' };
+    const studentsArray = [student1, student2, student3];
+    
+    let answerBlock = document.getElementById('display');
+    document.querySelector('button').addEventListener('click', search);
+    document.getElementById("dataBase").innerHTML = tableBuilder(3, 3);
+    for (let i = 0; i < studentsArray.length; i++) {
+        document.getElementsByClassName('tdClass')[i * 3 + 0].textContent = `${studentsArray[i].firstName}`;
+        document.getElementsByClassName('tdClass')[i * 3 + 1].textContent = `${studentsArray[i].lastName}`;
+        document.getElementsByClassName('tdClass')[i * 3 + 2].textContent = `${studentsArray[i].id}`;
+    }
+    function search() {
+        let inputElement = document.querySelector('input').value;
+        let searchWord = inputElement.trim();
+        if (searchWord / 1 == searchWord) {
+            searchById(searchWord);
+        }
+        else {
+            searchByName(searchWord.toLowerCase());
+        }
+    }
+    function searchById(searchNumber) {
+        for (let i = 0; i < studentsArray.length; i++) {
+            if (searchNumber == studentsArray[i].id) {
+                answerBlock.innerText = `${studentsArray[i].firstName}  ${studentsArray[i].lastName}`;
+                return;
+            }
+        }
+        answerBlock.innerText = `unable to find student with id: ${searchNumber}`;
+    }
+    function searchByName(searchWord) {
+        let foundItem = ''; let notFound = true;
+        for (let i = 0; i < studentsArray.length; i++) {
+            if (studentsArray[i].firstName.indexOf(searchWord) > -1 || studentsArray[i].lastName.indexOf(searchWord) > -1) {
+                foundItem += `${studentsArray[i].firstName}  ${studentsArray[i].lastName}\n`;
+                notFound = false;
+            }
+        }
+        if (notFound) {
+            answerBlock.innerText = `unable to find student with name: ${searchWord}`;
+        }
+        else {
+            answerBlock.innerText = `${foundItem}`;
+        }
+    }
+    function tdBuilder(num) {
+        let td = '';
+        for (let i = 0; i < num; i++) {
+            td += '<td class="tdClass"></td>'
+        }
+        return td;
+    }
+    function tableBuilder(trNum, tdNum) {
+        let table = '<table class="tableClass">';
+        for (let i = 0; i < trNum; i++) {
+            table += '<tr>' + tdBuilder(tdNum) + '</tr>';
+        }
+        table += '</table>';
+        return table;
+    }
+
+</script>
+
+</html>
